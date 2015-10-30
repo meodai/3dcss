@@ -132,7 +132,7 @@
 
     addChild: function(child) {
       this.children.push(child);
-      this.$elem.append(child.$object);
+      this.$elem.append(child.$elem);
     },
 
     getChildren: function() {
