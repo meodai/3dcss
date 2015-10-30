@@ -1,129 +1,140 @@
-/*jslint browser: true, indent: 4 */
+/*jslint browser: true, indent: 2 */
 
-(function($,undefined){
-    "use strict";
+'use strict';
 
-    var Object3d = function ($elem) {
-        this.attr = {
-            "position": {
-                x: {
-                    val: 0
-                },
-                y: {
-                    val: 0
-                },
-                z: {
-                    val: 0
-                }
-            },
-            "rotation": {
-                x: {
-                    val: 0
-                },
-                y: {
-                    val: 0
-                },
-                z: {
-                    val: 0
-                }
-            },
-            "scale": {
-                x: {
-                    val: 1
-                },
-                y: {
-                    val: 1
-                },
-                z: {
-                    val: 1
-                }
-            },
-            "opacity": {
-                val: 1
-            }
-        };
+var Object3d = function($elem) {
+  this.attr = {
+    position: {
+      x: {
+        val: 0,
+      },
+      y: {
+        val: 0,
+      },
+      z: {
+        val: 0,
+      },
+    },
+    rotation: {
+      x: {
+        val: 0,
+      },
+      y: {
+        val: 0,
+      },
+      z: {
+        val: 0,
+      },
+    },
+    scale: {
+      x: {
+        val: 1,
+      },
+      y: {
+        val: 1,
+      },
+      z: {
+        val: 1,
+      },
+    },
+    opacity: {
+      val: 1,
+    },
+  };
 
-        this.isVisible = true;
-        this.children = [];
-        this.dirty = false;
-        this.transition = null;
-        this.transformStyle = "preserve-3d";
-        this.transformOrigin = "50% 50% 0";
+  this.isVisible = true;
+  this.children = [];
+  this.dirty = false;
+  this.transition = null;
+  this.transformStyle = 'preserve-3d';
+  this.transformOrigin = '50% 50% 0';
 
-        this._relateToDom($elem);
-    };
+  this._relateToDom($elem);
+};
 
+Object3d.prototype = {
+  applyStyle: function() {
+    var transform;
 
-    Object3d.prototype = {
-        applyStyle: function () {
-            var transform;
+    if (!this.dirty) return;
 
-            if (!this.dirty) return;
+    transform = 'translate3d(' + this.attr.position.x.val + 'px,'
+              + this.attr.position.y.val + 'px,' + this.attr.position.z.val
+              + 'px) rotateX(' + this.attr.rotation.x.val + 'deg) rotateY('
+              + this.attr.rotation.y.val + 'deg) rotateZ('
+              + this.attr.rotation.z.val + 'deg)';
 
-            transform = 'translate3d(' + this.attr.position.x.val + 'px,' + this.attr.position.y.val + 'px,' + this.attr.position.z.val + 'px) rotateX(' + this.attr.rotation.x.val + 'deg) rotateY(' + this.attr.rotation.y.val + 'deg) rotateZ(' + this.attr.rotation.z.val + 'deg)';
-            this.$elem.css({
-                'transform': transform
-            });
-            this.dirty = false;
+    this.$elem.css({
+      transform: transform,
+    });
+    this.dirty = false;
 
-            return transform;
-        },
-        setOpacity: function (val) {
-            var elem = this.$elem[0];
+    return transform;
+  },
 
-            this.attr.opacity.val = val;
-            if (val <= 0) {
-                elem.style.display = 'none';
-            } else {
-                elem.style.display = 'block';
-            }
+  setOpacity: function(val) {
+    var elem = this.$elem[0];
 
-            elem.style.opacity = Math.max(0, Math.min(0.99, val));
-        },
-        setAttr: function (transformFunction, attr, val) {
-            this.attr[transformFunction][attr].val = val.toFixed(10);
-            this.dirty = true;
-        },
-        set: function (transformFunction, x, y, z) {
-            this.attr[transformFunction].x.val = x.toFixed(10);
-            this.attr[transformFunction].y.val = y.toFixed(10);
-            this.attr[transformFunction].z.val = z.toFixed(10);
-            this.dirty = true;
-        },
-        setRelative: function (transformFunction, x, y, z) {
-            this.set(
-                transformFunction,
-                this.attr[transformFunction].x.val + x,
-                this.attr[transformFunction].y.val + y,
-                this.attr[transformFunction].z.val + z
-            );
-        },
-        get: function (transformFunction, attr, allAttributes) {
-            return arguments.length > 2 ? this.attr[transformFunction][attr] : this.attr[transformFunction][attr].val;
-        },
-        addChild: function (child) {
-            this.children.push(child);
-            this.$elem.append(child.$object);
-        },
-        getChildren: function () {
-            return this.children;
-        },
-        _relateToDom: function ($elem) {
-            var $object;
-            if ($elem && $elem.length) {
-                $object = $elem;
-            } else {
-                $object = $("<div/>", {
-                    "class": "3dObject"
-                });
-            }
+    this.attr.opacity.val = val;
+    if (val <= 0) {
+      elem.style.display = 'none';
+    } else {
+      elem.style.display = 'block';
+    }
 
-            $object.data({
-                "classRef": this
-            });
+    elem.style.opacity = Math.max(0, Math.min(0.99, val));
+  },
 
-            this.$elem = $object;
-        }
-    };
+  setAttr: function(transformFunction, attr, val) {
+    this.attr[transformFunction][attr].val = val.toFixed(10);
+    this.dirty = true;
+  },
 
-}(jQuery));
+  set: function(transformFunction, x, y, z) {
+    this.attr[transformFunction].x.val = x.toFixed(10);
+    this.attr[transformFunction].y.val = y.toFixed(10);
+    this.attr[transformFunction].z.val = z.toFixed(10);
+    this.dirty = true;
+  },
+
+  setRelative: function(transformFunction, x, y, z) {
+    this.set(
+      transformFunction,
+      this.attr[transformFunction].x.val + x,
+      this.attr[transformFunction].y.val + y,
+      this.attr[transformFunction].z.val + z
+    );
+  },
+
+  get: function(transformFunction, attr, allAttributes) {
+    return arguments.length > 2 ? this.attr[transformFunction][attr] : this.attr[transformFunction][attr].val;
+  },
+
+  addChild: function(child) {
+    this.children.push(child);
+    this.$elem.append(child.$object);
+  },
+
+  getChildren: function() {
+    return this.children;
+  },
+
+  _relateToDom: function($elem) {
+    var $object;
+    if ($elem && $elem.length) {
+      $object = $elem;
+    } else {
+      $object = $('<div/>', {
+        class: '3dObject',
+      });
+    }
+
+    $object.data({
+      classRef: this,
+    });
+
+    this.$elem = $object;
+  },
+};
+
+module.exports = Object3d;
