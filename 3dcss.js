@@ -12,7 +12,7 @@
   } else if (typeof module === 'object' && module.exports) {
     module.exports = factory(require('jquery'));
   } else {
-    root.css3d = factory(root.jQuery);
+    root.Css3d = factory(root.jQuery);
   }
 }(this, function($) {
 
