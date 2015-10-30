@@ -67,7 +67,7 @@
   };
 
   Object3d.prototype = {
-    applyStyle: function() {
+    applyStyle: function(applyChildren) {
       var transform;
 
       if (!this.dirty) return;
@@ -77,6 +77,12 @@
                 + 'px) rotateX(' + this.attr.rotation.x.val + 'deg) rotateY('
                 + this.attr.rotation.y.val + 'deg) rotateZ('
                 + this.attr.rotation.z.val + 'deg)';
+
+      if (applyChildren && this.children.length) {
+        this.children.forEach(function(child) {
+          child.applyStyle(true);
+        });
+      }
 
       this.$elem.css({
         transform: transform,
