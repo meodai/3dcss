@@ -1,0 +1,24 @@
+{
+  "name": "3dcss",
+  "version": "0.1.0",
+  "description": "makes it easy to play around with 3d css",
+  "main": "3dcss.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meodai/3dcss.git"
+  },
+  "keywords": [
+    "3d",
+    "css",
+    "js"
+  ],
+  "author": "meodai <meodai@gmail.com> (https://github.com/meodai/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/meodai/3dcss/issues"
+  },
+  "homepage": "https://github.com/meodai/3dcss#readme"
+}
