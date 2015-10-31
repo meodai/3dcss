@@ -1,6 +1,5 @@
 {
   "name": "3dcss",
-  "version": "0.1.0",
   "main": "3dcss.js",
   "ignore": [
     "**/.*",
