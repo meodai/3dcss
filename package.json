@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/meodai/3dcss/issues"
   },
-  "homepage": "https://github.com/meodai/3dcss#readme"
+  "homepage": "https://github.com/meodai/3dcss#readme",
+  "dependencies": {
+    "jquery": "^2.1.4"
+  }
 }
