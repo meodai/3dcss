@@ -15,8 +15,29 @@
     root.Css3d = factory(root.jQuery);
   }
 }(this, function($) {
+  var prefix;
+  var transformfix;
+  var Object3d;
 
-  var Object3d = function($elem) {
+  prefix = (function (){
+    var styles = window.getComputedStyle(document.documentElement, ''),
+        pre = (Array.prototype.slice
+          .call(styles)
+          .join('')
+          .match(/-(moz|webkit|ms)-/) || (styles.OLink === '' && ['', 'o'])
+        )[1],
+        dom = ('WebKit|Moz|MS|O').match(new RegExp('(' + pre + ')', 'i'))[1];
+    return {
+      dom: dom,
+      lowercase: pre,
+      css: '-' + pre + '-',
+      js: pre[0].toUpperCase() + pre.substr(1),
+    };
+  })();
+
+  transformfix = prefix.js ? prefix.js + 'Transform' : 'transform';
+
+  Object3d = function(elem) {
     this.attr = {
       position: {
         x: {
@@ -63,7 +84,7 @@
     this.transformStyle = 'preserve-3d';
     this.transformOrigin = '50% 50% 0';
 
-    this._relateToDom($elem);
+    this._relateToDom(elem);
   };
 
   Object3d.prototype = {
@@ -72,11 +93,11 @@
 
       if (!this.dirty) return;
 
-      transform = 'translate3d(' + this.attr.position.x.val + 'px,'
-                + this.attr.position.y.val + 'px,' + this.attr.position.z.val
-                + 'px) rotateX(' + this.attr.rotation.x.val + 'deg) rotateY('
-                + this.attr.rotation.y.val + 'deg) rotateZ('
-                + this.attr.rotation.z.val + 'deg)';
+      transform = 'translate3d(' + this.getCSS('position', 'x') + 'px,'
+                + this.getCSS('position', 'y') + 'px,' + this.getCSS('position', 'z')
+                + 'px) rotateX(' + this.getCSS('rotation', 'x') + 'deg) rotateY('
+                + this.getCSS('rotation', 'y') + 'deg) rotateZ('
+                + this.getCSS('rotation', 'z') + 'deg)';
 
       if (applyChildren && this.children.length) {
         this.children.forEach(function(child) {
@@ -84,36 +105,35 @@
         });
       }
 
-      this.$elem.css({
+      this.elem.style[transformfix] = transform;
+      /*this.$elem.css({
         transform: transform,
-      });
+      });*/
       this.dirty = false;
 
       return transform;
     },
 
     setOpacity: function(val) {
-      var elem = this.$elem[0];
-
       this.attr.opacity.val = val;
       if (val <= 0) {
-        elem.style.display = 'none';
+        this.elem.style.display = 'none';
       } else {
-        elem.style.display = 'block';
+        this.elem.style.display = 'block';
       }
 
-      elem.style.opacity = Math.max(0, Math.min(0.99, val));
+      this.elem.style.opacity = Math.max(0, Math.min(0.99, val));
     },
 
     setAttr: function(transformFunction, attr, val) {
-      this.attr[transformFunction][attr].val = val.toFixed(10);
+      this.attr[transformFunction][attr].val = parseFloat(val);
       this.dirty = true;
     },
 
     set: function(transformFunction, x, y, z) {
-      this.attr[transformFunction].x.val = x.toFixed(10);
-      this.attr[transformFunction].y.val = y.toFixed(10);
-      this.attr[transformFunction].z.val = z.toFixed(10);
+      this.attr[transformFunction].x.val = parseFloat(x);
+      this.attr[transformFunction].y.val = parseFloat(y);
+      this.attr[transformFunction].z.val = parseFloat(z);
       this.dirty = true;
     },
 
@@ -127,33 +147,36 @@
     },
 
     get: function(transformFunction, attr, allAttributes) {
-      return arguments.length > 2 ? this.attr[transformFunction][attr] : this.attr[transformFunction][attr].val;
+      return allAttributes ? this.attr[transformFunction][attr] : this.attr[transformFunction][attr].val;
+    },
+
+    getCSS: function(transformFunction, attr, allAttributes) {
+      return this.get(transformFunction, attr, allAttributes).toFixed(10);
     },
 
     addChild: function(child) {
       this.children.push(child);
-      this.$elem.append(child.$elem);
+      this.elem.appendChild(child.elem);
     },
 
     getChildren: function() {
       return this.children;
     },
 
-    _relateToDom: function($elem) {
-      var $object;
-      if ($elem && $elem.length) {
-        $object = $elem;
+    _relateToDom: function(domElement) {
+      var elem;
+      if (domElement) {
+        elem = domElement;
       } else {
-        $object = $('<div/>', {
-          class: '3dObject',
-        });
+        elem = document.createElement('div');
+        elem.className = 'css3d';
       }
 
-      $object.data({
+      /*$object.data({
         classRef: this,
-      });
+      });*/
 
-      this.$elem = $object;
+      this.elem = elem;
     },
   };
 
