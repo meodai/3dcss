@@ -1,5 +1,4 @@
 /*jslint browser: true, indent: 2 */
-
 'use strict';
 
 (function(root, factory) {
@@ -21,14 +20,15 @@
 
   prefix = (function() {
     var styles;
-    var pro;
+    var pre;
+    var dom;
     styles = window.getComputedStyle(document.documentElement, '');
     pre = (Array.prototype.slice
           .call(styles)
           .join('')
           .match(/-(moz|webkit|ms)-/) || (styles.OLink === '' && ['', 'o'])
-        )[1],
-        dom = ('WebKit|Moz|MS|O').match(new RegExp('(' + pre + ')', 'i'))[1];
+        )[1];
+    dom = ('WebKit|Moz|MS|O').match(new RegExp('(' + pre + ')', 'i'))[1];
     return {
       dom: dom,
       lowercase: pre,
@@ -110,7 +110,6 @@
       }
 
       this.elem.style[transformfix] = transform;
-
       this.dirty = false;
 
       return transform;
@@ -142,9 +141,9 @@
     setRelative: function(transformFunction, x, y, z) {
       this.set(
         transformFunction,
-        this.attr[transformFunction].x.val + x,
-        this.attr[transformFunction].y.val + y,
-        this.attr[transformFunction].z.val + z
+        this.getCSS(transformFunction, 'x') + x,
+        this.getCSS(transformFunction, 'y') + y,
+        this.getCSS(transformFunction, 'z') + z
       );
     },
 
