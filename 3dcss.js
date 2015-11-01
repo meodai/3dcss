@@ -165,9 +165,9 @@
     setRelative: function(transformFunction, x, y, z) {
       this.set(
         transformFunction,
-        this.getCSS(transformFunction, 'x') + x,
-        this.getCSS(transformFunction, 'y') + y,
-        this.getCSS(transformFunction, 'z') + z
+        this.get(transformFunction, 'x') + x,
+        this.get(transformFunction, 'y') + y,
+        this.get(transformFunction, 'z') + z
       );
     },
     /**
