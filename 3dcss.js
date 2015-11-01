@@ -1,5 +1,4 @@
 /*jslint browser: true, indent: 2 */
-/*global $, jQuery*/
 
 'use strict';
 
@@ -15,13 +14,16 @@
     root.Css3d = factory();
   }
 }(this, function() {
+
   var prefix;
   var transformfix;
   var Object3d;
 
-  prefix = (function (){
-    var styles = window.getComputedStyle(document.documentElement, ''),
-        pre = (Array.prototype.slice
+  prefix = (function() {
+    var styles;
+    var pro;
+    styles = window.getComputedStyle(document.documentElement, '');
+    pre = (Array.prototype.slice
           .call(styles)
           .join('')
           .match(/-(moz|webkit|ms)-/) || (styles.OLink === '' && ['', 'o'])
@@ -106,9 +108,7 @@
       }
 
       this.elem.style[transformfix] = transform;
-      /*this.$elem.css({
-        transform: transform,
-      });*/
+
       this.dirty = false;
 
       return transform;
@@ -171,10 +171,6 @@
         elem = document.createElement('div');
         elem.className = 'css3d';
       }
-
-      /*$object.data({
-        classRef: this,
-      });*/
 
       this.elem = elem;
     },
