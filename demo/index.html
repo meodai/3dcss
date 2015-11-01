@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html class=''>
+<head>
+<meta charset='UTF-8'>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+}
+body, html {
+  background: #16161D;
+  color: #fff;
+  height: 100%;
+  -webkit-perspective: 1200px;
+          perspective: 1200px;
+  overflow: hidden;
+}
+
+h1 {
+  margin: 0;
+  font-size: 14vw;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+
+.mother {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  -webkit-transform-style: preserve-3d;
+          transform-style: preserve-3d;
+}
+
+.cloud, .cloudPart {
+  position: absolute;
+  width: 35vh;
+  height: 35vh;
+  margin: -128px 0 0 -128px;
+  top: 0;
+  left: 0;
+}
+
+.cloud {
+  -webkit-transform-style: preserve-3d;
+          transform-style: preserve-3d;
+}
+
+.cloudPart {
+  background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/102565/cloud.png) no-repeat;
+  background-size: 100% auto;
+}
+</style></head>
+<body>
+
+<div class="mother js-mother"></div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="../3dcss.js"></script>
+<script>
+function createCloud (minParticles, maxParticles, depth){
+  var x,y,z,a,s, $cloud, $cloudPart,
+      cloudHtml = "<div class='cloud'></div>", cloudPartHtml = "<div class='cloudPart'></div>",
+      cloud, cloudPart;
+
+  $cloud = $(cloudHtml);
+  cloud = new Css3d($cloud);
+  depth = depth || 0;
+
+  for(i = 0; i < (minParticles || 2) + Math.round( Math.random() * ( maxParticles || 10) ); i++){
+    $cloudPart = $(cloudPartHtml);
+
+    x = 256 - ( Math.random() * 256 );
+    y = 256 - ( Math.random() * 256 );
+    z = 100 - ( Math.random() * 200 );
+    a = Math.random() * 360;
+    s = 0.25 + Math.random();
+
+    cloudPart = new Css3d($cloudPart);
+    cloudPart.set('position', x,y,z);
+    cloudPart.setAttr('rotation', 'z', a);
+    cloudPart.setAttr('scale', 'x', s);
+    cloudPart.setAttr('scale', 'y', s);
+    cloudPart.applyStyle();
+    cloud.addChild(cloudPart);
+  }
+
+  cloud.$elem.css({"top": ( Math.random() * 100 ) + "%", "left":  ( Math.random() * 100 ) + "%"});
+  cloud.setAttr('position', 'z', ((Math.random() < 0.5 ? -1 : 1) * Math.random() * 100) + depth );
+  cloud.applyStyle();
+
+  return cloud;
+};
+
+var world = new Css3d($('.js-mother'));
+
+var max = 0;
+for(var j = 0; j < 50; j++) {
+  max = j * 175;
+  world.addChild( createCloud(1,5,max) );
+}
+
+var i = 0;
+function setSize() {
+  world.setAttr('position', 'x', window.innerWidth * -.4);
+  world.setAttr('position', 'y', window.innerHeight * -.4);
+}
+setSize();
+
+$(window).on('resize', setSize);
+
+var speed = 0.75;
+var max = -max;
+var direction = -1;
+
+
+function loop (){
+  i = i + (direction * speed);
+  world.setAttr('position', 'z', i);
+  world.applyStyle();
+  world.children.forEach(function(cloudy){
+    cloudy.setAttr('rotation', 'z', i * .015);
+    cloudy.applyStyle();
+  });
+  if(i < max && direction == -1) {
+    direction = 1;
+  }
+  if(i < 200) {
+    requestAnimationFrame(loop);
+  }
+};
+
+loop();
+//# sourceURL=pen.js
+</script>
+</body></html>
