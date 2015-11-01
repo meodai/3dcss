@@ -90,6 +90,12 @@
   };
 
   Object3d.prototype = {
+    /**
+     * applyStyle applies the attributes as CSS styles to the tom element
+     * @param   {boolean} applyChildren  will call applyStyle on all the
+     *                                   children if set true
+     * @returns {string} complete        transform string
+     */
     applyStyle: function(applyChildren) {
       var transform;
 
@@ -114,7 +120,11 @@
 
       return transform;
     },
-
+    /**
+     * setOpacity changes opacity of element but also hides the element when
+     * opacity reaches 0
+     * @param {float} val  opacity value between 0 and 1
+     */
     setOpacity: function(val) {
       this.attr.opacity.val = val;
       if (val <= 0) {
@@ -125,19 +135,36 @@
 
       this.elem.style.opacity = Math.max(0, Math.min(0.99, val));
     },
-
+    /**
+     * setAttr sets the value for a single attribute
+     * @param {string} transformFunction  attribute-group
+     * @param {string} attr               attribute
+     * @param {float}  val                value to set
+     */
     setAttr: function(transformFunction, attr, val) {
       this.attr[transformFunction][attr].val = parseFloat(val);
       this.dirty = true;
     },
-
+    /**
+     * sets a group of attributes
+     * @param {string} transformFunction  attribute-group
+     * @param {float}  x                  x position
+     * @param {float}  y                  y position
+     * @param {float}  z                  z position
+     */
     set: function(transformFunction, x, y, z) {
       this.attr[transformFunction].x.val = parseFloat(x);
       this.attr[transformFunction].y.val = parseFloat(y);
       this.attr[transformFunction].z.val = parseFloat(z);
       this.dirty = true;
     },
-
+    /**
+     * setRelative adds a value to a current position of an attribute group
+     * @param {string} transformFunction attribute-group
+     * @param {float}  x                 x increment
+     * @param {float}  y                 y increment
+     * @param {float}  z                 z increment
+     */
     setRelative: function(transformFunction, x, y, z) {
       this.set(
         transformFunction,
@@ -146,24 +173,46 @@
         this.getCSS(transformFunction, 'z') + z
       );
     },
-
+    /**
+     * returns an whole group or a single attribute
+     * @param   {string}  transformFunction attribute-group
+     * @param   {string}  attr              attribute
+     * @param   {boolean} allAttributes     returns object with all attributes
+     *                                      when set true
+     * @returns {object/flaot}              object or float
+     */
     get: function(transformFunction, attr, allAttributes) {
       return allAttributes ? this.attr[transformFunction][attr] : this.attr[transformFunction][attr].val;
     },
-
+    /**
+     * returns normalized values
+     * @param   {string} transformFunction  attribute-group
+     * @param   {string} attr               attribute
+     * @returns {string}                    .toFixed(10) normalized value
+     */
     getCSS: function(transformFunction, attr) {
       return this.get(transformFunction, attr).toFixed(10);
     },
-
+    /**
+     * adds a child 3d element
+     * @param {function} child  other Object3d Instance
+     */
     addChild: function(child) {
       this.children.push(child);
       this.elem.appendChild(child.elem);
     },
-
+    /**
+     * returns all child instances
+     * @returns {array} array of Object3d instances.
+     */
     getChildren: function() {
       return this.children;
     },
-
+    /**
+     * binds the current instance to a DOM element or creates a new one
+     * @param   {DOMnode} domElement  DOMnode that will be bound to the instance
+     * @returns {DOMnode}             returns DOMnode that was created or bound
+     */
     _relateToDom: function(domElement) {
       var elem;
       if (domElement) {
@@ -174,6 +223,7 @@
       }
 
       this.elem = elem;
+      return elem;
     },
   };
 
