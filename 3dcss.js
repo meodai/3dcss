@@ -95,11 +95,13 @@
 
       if (!this.dirty) return;
 
-      transform = 'translate3d(' + this.getCSS('position', 'x') + 'px,'
-                + this.getCSS('position', 'y') + 'px,' + this.getCSS('position', 'z')
-                + 'px) rotateX(' + this.getCSS('rotation', 'x') + 'deg) rotateY('
-                + this.getCSS('rotation', 'y') + 'deg) rotateZ('
-                + this.getCSS('rotation', 'z') + 'deg)';
+      transform = 'translate3d('
+                  + this.getCSS('position', 'x') + 'px,'
+                  + this.getCSS('position', 'y') + 'px,'
+                  + this.getCSS('position', 'z') + 'px) rotateX('
+                  + this.getCSS('rotation', 'x') + 'deg) rotateY('
+                  + this.getCSS('rotation', 'y') + 'deg) rotateZ('
+                  + this.getCSS('rotation', 'z') + 'deg)';
 
       if (applyChildren && this.children.length) {
         this.children.forEach(function(child) {
@@ -150,8 +152,8 @@
       return allAttributes ? this.attr[transformFunction][attr] : this.attr[transformFunction][attr].val;
     },
 
-    getCSS: function(transformFunction, attr, allAttributes) {
-      return this.get(transformFunction, attr, allAttributes).toFixed(10);
+    getCSS: function(transformFunction, attr) {
+      return this.get(transformFunction, attr).toFixed(10);
     },
 
     addChild: function(child) {
