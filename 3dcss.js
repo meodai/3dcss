@@ -6,15 +6,15 @@
 (function(root, factory) {
   /* UMD adapter https://github.com/umdjs/umd */
   if (typeof define === 'function' && define.amd) {
-    define(['jquery'], function($) {
-      return (root.returnExportsGlobal = factory($));
+    define(function() {
+      return (root.returnExportsGlobal = factory());
     });
   } else if (typeof module === 'object' && module.exports) {
-    module.exports = factory(require('jquery'));
+    module.exports = factory();
   } else {
-    root.Css3d = factory(root.jQuery);
+    root.Css3d = factory();
   }
-}(this, function($) {
+}(this, function() {
   var prefix;
   var transformfix;
   var Object3d;
