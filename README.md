@@ -25,9 +25,9 @@ Every element that will be inside `.world` can be instantiated with `Css3d`
 </div>
 <script>
   var obj3d = new Css3d(document.getElementById('threedee'));
-  obj3d.set('position', 20, 40, 50);
-  obj3d.setAttr('rotation', 'z', '-100');
-  obj3d.applyStyle();
+  obj3d.set('position', 20, 40, 50)
+			 .setAttr('rotation', 'z', '-100')
+			 .applyStyle();
 </script>
 ```
 see this  [example](http://codepen.io/meodai/pen/qOybJa?editors=001)
