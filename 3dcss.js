@@ -117,7 +117,7 @@
       this.elem.style[transformfix] = transform;
       this.dirty = false;
 
-      return transform;
+      return this;
     },
     /**
      * setOpacity changes opacity of element but also hides the element when
@@ -133,6 +133,7 @@
       }
 
       this.elem.style.opacity = Math.max(0, Math.min(0.99, val));
+      return this;
     },
     /**
      * setAttr sets the value for a single attribute
@@ -143,6 +144,7 @@
     setAttr: function(transformFunction, attr, val) {
       this.attr[transformFunction][attr].val = parseFloat(val);
       this.dirty = true;
+      return this;
     },
     /**
      * sets a group of attributes
@@ -156,6 +158,7 @@
       this.attr[transformFunction].y.val = parseFloat(y);
       this.attr[transformFunction].z.val = parseFloat(z);
       this.dirty = true;
+      return this;
     },
     /**
      * setRelative adds a value to a current position of an attribute group
@@ -171,6 +174,7 @@
         this.get(transformFunction, 'y') + y,
         this.get(transformFunction, 'z') + z
       );
+      return this;
     },
     /**
      * returns an whole group or a single attribute
@@ -199,6 +203,7 @@
     addChild: function(child) {
       this.children.push(child);
       this.elem.appendChild(child.elem);
+      return this;
     },
     /**
      * returns all child instances
