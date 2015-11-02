@@ -85,17 +85,16 @@ function createCloud (minParticles, maxParticles, depth){
     s = 0.25 + Math.random();
 
     cloudPart = new Css3d($cloudPart[0]);
-    cloudPart.set('position', x,y,z);
-    cloudPart.setAttr('rotation', 'z', a);
-    cloudPart.setAttr('scale', 'x', s);
-    cloudPart.setAttr('scale', 'y', s);
-    cloudPart.applyStyle();
+    cloudPart.set('position', x,y,z)
+             .setAttr('rotation', 'z', a)
+             .setAttr('scale', 'x', s)
+             .setAttr('scale', 'y', s)
+             .applyStyle();
     cloud.addChild(cloudPart);
   }
 
   $cloud.css({"top": ( Math.random() * 100 ) + "%", "left":  ( Math.random() * 100 ) + "%"});
-  cloud.setAttr('position', 'z', ((Math.random() < 0.5 ? -1 : 1) * Math.random() * 100) + depth );
-  cloud.applyStyle();
+  cloud.setAttr('position', 'z', ((Math.random() < 0.5 ? -1 : 1) * Math.random() * 100) + depth ).applyStyle();
 
   return cloud;
 };
@@ -110,8 +109,8 @@ for(var j = 0; j < 50; j++) {
 
 var i = 0;
 function setSize() {
-  world.setAttr('position', 'x', window.innerWidth * -.4);
-  world.setAttr('position', 'y', window.innerHeight * -.4);
+  world.setAttr('position', 'x', window.innerWidth * -.4)
+       .setAttr('position', 'y', window.innerHeight * -.4);
 }
 setSize();
 
@@ -127,8 +126,7 @@ function loop (){
   world.setAttr('position', 'z', i);
   world.applyStyle();
   world.children.forEach(function(cloudy){
-    cloudy.setRelative('rotation', 0,0, .025);
-    cloudy.applyStyle();
+    cloudy.setRelative('rotation', 0,0, .025).applyStyle();
   });
   if(i < max && direction == -1) {
     direction = 1;
