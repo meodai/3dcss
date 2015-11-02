@@ -85,7 +85,7 @@
     this.transformStyle = 'preserve-3d';
     this.transformOrigin = '50% 50% 0';
 
-    this._relateToDom(elem);
+    this.elem = this._relateToDom(elem);
   };
 
   Object3d.prototype = {
@@ -226,7 +226,6 @@
         elem.className = 'css3d';
       }
 
-      this.elem = elem;
       return elem;
     },
   };
