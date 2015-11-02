@@ -17,7 +17,9 @@
   var prefix;
   var transformfix;
   var Object3d;
-
+  /**
+   * Detect Vendor prefix: http://davidwalsh.name/vendor-prefix
+   */
   prefix = (function() {
     var styles;
     var pre;
