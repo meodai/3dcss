@@ -1,7 +1,7 @@
 3dcss
 =====
 
-JS class that helps with 3d CSS. [Demo](http://codepen.io/meodai/pen/YyvYoe?editors=001)
+Dependency free micro-library to deal with 3D CSS. [Demo](http://codepen.io/meodai/pen/YyvYoe?editors=001)
 
 ### Why?
 Places and manipulates html elements in a 3D space. I know of [three.js](http://threejs.org/) and I love it, but sometimes I just want to enhance the elements that are already styled with some 3D.
