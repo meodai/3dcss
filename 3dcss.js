@@ -39,7 +39,7 @@
   transformfix = prefix.js ? prefix.js + 'Transform' : 'transform';
 
   Object3d = function(elem) {
-    this.attr = {
+    this.properties = {
       position: {
         x: {
           val: 0,
@@ -125,7 +125,7 @@
      * @param {float} val  opacity value between 0 and 1
      */
     setOpacity: function(val) {
-      this.attr.opacity.val = val;
+      this.properties.opacity.val = val;
       if (val <= 0) {
         this.elem.style.display = 'none';
       } else {
@@ -142,7 +142,7 @@
      * @param {float}  val                value to set
      */
     setAttr: function(transformFunction, attr, val) {
-      this.attr[transformFunction][attr].val = parseFloat(val);
+      this.properties[transformFunction][attr].val = parseFloat(val);
       this.dirty = true;
       return this;
     },
@@ -154,9 +154,9 @@
      * @param {float}  z                  z position
      */
     set: function(transformFunction, x, y, z) {
-      this.attr[transformFunction].x.val = parseFloat(x);
-      this.attr[transformFunction].y.val = parseFloat(y);
-      this.attr[transformFunction].z.val = parseFloat(z);
+      this.properties[transformFunction].x.val = parseFloat(x);
+      this.properties[transformFunction].y.val = parseFloat(y);
+      this.properties[transformFunction].z.val = parseFloat(z);
       this.dirty = true;
       return this;
     },
@@ -185,7 +185,7 @@
      * @returns {object/flaot}              object or float
      */
     get: function(transformFunction, attr, allAttributes) {
-      return allAttributes ? this.attr[transformFunction][attr] : this.attr[transformFunction][attr].val;
+      return allAttributes ? this.properties[transformFunction][attr] : this.properties[transformFunction][attr].val;
     },
     /**
      * returns normalized values
@@ -209,7 +209,10 @@
      * returns all child instances
      * @returns {array} array of Object3d instances.
      */
-    getChildren: function() {
+    getChildren: function(preserve3d) {
+      if (!preserve3d) {
+
+      }
       return this.children;
     },
     /**
