@@ -87,20 +87,20 @@ function createCloud (minParticles, maxParticles, depth){
     s = 0.25 + Math.random();
 
     cloudPart = new css3d.Node($cloudPart[0]);
-    cloudPart.set('transform', x - (window.innerWidth * .35) * .5,y - (window.innerHeight * .35) * .5,z)
+    cloudPart.set('transform', x - (window.innerHeight * .35) * .5,y - (window.innerHeight * .35) * .5,z)
              .setAttr('rotation', 'z', a)
              .setAttr('scale', 'x', s)
              .setAttr('scale', 'y', s)
-             .setAttr('size', 'x', window.innerWidth * .35)
-             .setAttr('size', 'y', window.innerWidth * .35)
+             .setAttr('size', 'x', window.innerHeight * .35)
+             .setAttr('size', 'y', window.innerHeight * .35)
              .applyStyle();
     cloud.addChild(cloudPart);
   }
 
   $cloud.css({"top": ( Math.random() * 100 ) + "%", "left":  ( Math.random() * 100 ) + "%"});
   cloud.setAttr('transform', 'z', ((Math.random() < 0.5 ? -1 : 1) * Math.random() * 100) + depth )
-       .setAttr('size', 'x', window.innerWidth * .35)
-       .setAttr('size', 'y', window.innerWidth * .35)
+       .setAttr('size', 'x', window.innerHeight * .35)
+       .setAttr('size', 'y', window.innerHeight * .35)
        .applyStyle();
 
   return cloud;
