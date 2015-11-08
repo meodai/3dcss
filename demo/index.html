@@ -47,9 +47,6 @@ h1 {
 
 .cloud, .cloudPart {
   position: absolute;
-  width: 35vh;
-  height: 35vh;
-  margin: -128px 0 0 -128px;
   top: 0;
   left: 0;
 }
@@ -90,16 +87,21 @@ function createCloud (minParticles, maxParticles, depth){
     s = 0.25 + Math.random();
 
     cloudPart = new css3d.Node($cloudPart[0]);
-    cloudPart.set('transform', x,y,z)
+    cloudPart.set('transform', x - (window.innerWidth * .35) * .5,y - (window.innerHeight * .35) * .5,z)
              .setAttr('rotation', 'z', a)
              .setAttr('scale', 'x', s)
              .setAttr('scale', 'y', s)
+             .setAttr('size', 'x', window.innerWidth * .35)
+             .setAttr('size', 'y', window.innerWidth * .35)
              .applyStyle();
     cloud.addChild(cloudPart);
   }
 
   $cloud.css({"top": ( Math.random() * 100 ) + "%", "left":  ( Math.random() * 100 ) + "%"});
-  cloud.setAttr('transform', 'z', ((Math.random() < 0.5 ? -1 : 1) * Math.random() * 100) + depth ).applyStyle();
+  cloud.setAttr('transform', 'z', ((Math.random() < 0.5 ? -1 : 1) * Math.random() * 100) + depth )
+       .setAttr('size', 'x', window.innerWidth * .35)
+       .setAttr('size', 'y', window.innerWidth * .35)
+       .applyStyle();
 
   return cloud;
 };
@@ -107,6 +109,10 @@ function createCloud (minParticles, maxParticles, depth){
 var cam = new css3d.Cam($('.cam')[0]);
 
 var world = new css3d.Node($('.js-mother')[0]);
+
+world.setAttr('size', 'x', window.innerWidth * .8)
+      .setAttr('size', 'y', window.innerHeight * .8)
+      .applyStyle();
 
 var max = 0;
 for(var j = 0; j < 50; j++) {
@@ -146,6 +152,5 @@ function loop (){
 };
 
 loop();
-//# sourceURL=pen.js
 </script>
 </body></html>

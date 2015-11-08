@@ -150,8 +150,8 @@
       }
 
       this.elem.style[transformfix] = transform;
-      this.elem.width = this.getCSS('size', 'x') + 'px';
-      this.elem.height = this.getCSS('size', 'y') + 'px';
+      this.elem.style.width = this.getCSS('size', 'x') + 'px';
+      this.elem.style.height = this.getCSS('size', 'y') + 'px';
       this.dirty = false;
 
       return this;
@@ -252,7 +252,6 @@
   };
 
   Cam = function(elem) {
-    this.children = [];
     this.visibles = [];
     this.dirty = false;
     this.perspective = 1200;
