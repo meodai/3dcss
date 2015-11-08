@@ -10,13 +10,17 @@
   } else if (typeof module === 'object' && module.exports) {
     module.exports = factory();
   } else {
-    root.Css3d = factory();
+    root.css3d = factory();
   }
 }(this, function() {
 
   var prefix;
   var transformfix;
+  var perspectivefix;
   var Object3d;
+  var Cam;
+  var relateToDom;
+
   /**
    * Detect Vendor prefix: http://davidwalsh.name/vendor-prefix
    */
@@ -37,9 +41,40 @@
   })();
 
   transformfix = prefix.js ? prefix.js + 'Transform' : 'transform';
+  perspectivefix = prefix.js ? prefix.js + 'Perspective' : 'perspective';
+
+  /**
+   * binds the current instance to a DOM element or creates a new one
+   * @param   {string}  className   css class that will be added to element
+   * @param   {DOMnode} domElement  DOMnode that will be bound to the instance
+   * @returns {DOMnode}             returns DOMnode that was created or bound
+   */
+  var relateToDom = function(className, domElement) {
+    className = className || 'css3d';
+    var elem;
+    if (domElement) {
+      elem = domElement;
+    } else {
+      elem = document.createElement('div');
+    }
+
+    elem.classList.add(className);
+    return elem;
+  };
 
   Object3d = function(elem) {
     this.properties = {
+      size: {
+        x: {
+          val: 0,
+        },
+        y: {
+          val: 0,
+        },
+        z: {
+          val: 0,
+        },
+      },
       transform: {
         x: {
           val: 0,
@@ -85,7 +120,7 @@
     this.transformStyle = 'preserve-3d';
     this.transformOrigin = '50% 50% 0';
 
-    this.elem = this._relateToDom(elem);
+    this.elem = relateToDom('css3d', elem);
   };
 
   Object3d.prototype = {
@@ -115,6 +150,8 @@
       }
 
       this.elem.style[transformfix] = transform;
+      this.elem.width = this.getCSS('size', 'x') + 'px';
+      this.elem.height = this.getCSS('size', 'y') + 'px';
       this.dirty = false;
 
       return this;
@@ -209,29 +246,51 @@
      * returns all child instances
      * @returns {array} array of Object3d instances.
      */
-    getChildren: function(preserve3d) {
-      if (!preserve3d) {
-
-      }
+    getChildren: function() {
       return this.children;
-    },
-    /**
-     * binds the current instance to a DOM element or creates a new one
-     * @param   {DOMnode} domElement  DOMnode that will be bound to the instance
-     * @returns {DOMnode}             returns DOMnode that was created or bound
-     */
-    _relateToDom: function(domElement) {
-      var elem;
-      if (domElement) {
-        elem = domElement;
-      } else {
-        elem = document.createElement('div');
-        elem.className = 'css3d';
-      }
-
-      return elem;
     },
   };
 
-  return Object3d;
+  Cam = function(elem) {
+    this.children = [];
+    this.visibles = [];
+    this.dirty = false;
+    this.perspective = 1200;
+    this.obj3d = new Object3d(elem);
+    this.setPerspective(this.perspective);
+    this.applyStyle();
+  };
+
+  Cam.prototype = {
+    /**
+     * applyStyle applies the attributes as CSS styles to the tom element
+     * @param   {boolean} applyChildren  will call applyStyle on all the
+     *                                   children if set true
+     * @returns {string} complete        transform string
+     */
+    applyStyle: function() {
+      if (!this.dirty && !this.obj3d.dirty) return;
+
+      this.obj3d.elem.style[perspectivefix] = this.perspective + 'px';
+      this.dirty = false;
+
+      return this;
+    },
+    /**
+     * setPerspective sets the value for a single attribute
+     * @param {string} transformFunction  attribute-group
+     * @param {string} attr               attribute
+     * @param {float}  val                value to set
+     */
+    setPerspective: function(val) {
+      this.perspective = parseFloat(val);
+      this.dirty = true;
+      return this;
+    },
+  };
+
+  return {
+    Node: Object3d,
+    Cam: Cam,
+  };
 }));
