@@ -1,6 +1,6 @@
 {
   "name": "3dcss",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "makes it easy to play around with 3d css",
   "main": "3dcss.js",
   "scripts": {

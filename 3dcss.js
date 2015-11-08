@@ -40,7 +40,7 @@
 
   Object3d = function(elem) {
     this.properties = {
-      position: {
+      transform: {
         x: {
           val: 0,
         },
@@ -101,9 +101,9 @@
       if (!this.dirty) return;
 
       transform = 'translate3d('
-                  + this.getCSS('position', 'x') + 'px,'
-                  + this.getCSS('position', 'y') + 'px,'
-                  + this.getCSS('position', 'z') + 'px) rotateX('
+                  + this.getCSS('transform', 'x') + 'px,'
+                  + this.getCSS('transform', 'y') + 'px,'
+                  + this.getCSS('transform', 'z') + 'px) rotateX('
                   + this.getCSS('rotation', 'x') + 'deg) rotateY('
                   + this.getCSS('rotation', 'y') + 'deg) rotateZ('
                   + this.getCSS('rotation', 'z') + 'deg)';
