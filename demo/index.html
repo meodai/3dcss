@@ -87,20 +87,20 @@ function createCloud (minParticles, maxParticles, depth){
     s = 0.25 + Math.random();
 
     cloudPart = new css3d.Node($cloudPart[0]);
-    cloudPart.set('transform', x - (window.innerHeight * .35) * .5,y - (window.innerHeight * .35) * .5,z)
-             .setAttr('rotation', 'z', a)
-             .setAttr('scale', 'x', s)
-             .setAttr('scale', 'y', s)
-             .setAttr('size', 'x', window.innerHeight * .35)
-             .setAttr('size', 'y', window.innerHeight * .35)
+    cloudPart.setAll('translate', x - (window.innerHeight * .35) * .5,y - (window.innerHeight * .35) * .5,z)
+             .set('rotation', 'z', a)
+             .set('scale', 'x', s)
+             .set('scale', 'y', s)
+             .set('size', 'x', window.innerHeight * .35)
+             .set('size', 'y', window.innerHeight * .35)
              .applyStyle();
     cloud.addChild(cloudPart);
   }
 
   $cloud.css({"top": ( Math.random() * 100 ) + "%", "left":  ( Math.random() * 100 ) + "%"});
-  cloud.setAttr('transform', 'z', ((Math.random() < 0.5 ? -1 : 1) * Math.random() * 100) + depth )
-       .setAttr('size', 'x', window.innerHeight * .35)
-       .setAttr('size', 'y', window.innerHeight * .35)
+  cloud.set('translate', 'z', ((Math.random() < 0.5 ? -1 : 1) * Math.random() * 100) + depth )
+       .set('size', 'x', window.innerHeight * .35)
+       .set('size', 'y', window.innerHeight * .35)
        .applyStyle();
 
   return cloud;
@@ -110,9 +110,9 @@ var cam = new css3d.Cam($('.cam')[0]);
 
 var world = new css3d.Node($('.js-mother')[0]);
 
-world.setAttr('size', 'x', window.innerWidth * .8)
-      .setAttr('size', 'y', window.innerHeight * .8)
-      .applyStyle();
+world.set('size', 'x', window.innerWidth * .8)
+     .set('size', 'y', window.innerHeight * .8)
+     .applyStyle();
 
 var max = 0;
 for(var j = 0; j < 50; j++) {
@@ -124,8 +124,8 @@ cam.obj3d.addChild( world );
 
 var i = 0;
 function setSize() {
-  world.setAttr('transform', 'x', window.innerWidth * -.4)
-       .setAttr('transform', 'y', window.innerHeight * -.4);
+  world.set('translate', 'x', window.innerWidth * -.4)
+       .set('translate', 'y', window.innerHeight * -.4);
 }
 setSize();
 
@@ -138,10 +138,10 @@ var direction = -1;
 
 function loop (){
   i = i + (direction * speed);
-  world.setAttr('transform', 'z', i);
+  world.set('translate', 'z', i);
   world.applyStyle();
   world.children.forEach(function(cloudy){
-    cloudy.setRelative('rotation', 0,0, .025).applyStyle();
+    cloudy.setAllRelative('rotation', 0,0, .025).applyStyle();
   });
   if(i < max && direction == -1) {
     direction = 1;

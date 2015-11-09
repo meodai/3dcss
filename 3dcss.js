@@ -49,7 +49,7 @@
    * @param   {DOMnode} domElement  DOMnode that will be bound to the instance
    * @returns {DOMnode}             returns DOMnode that was created or bound
    */
-  var relateToDom = function(className, domElement) {
+  relateToDom = function(className, domElement) {
     className = className || 'css3d';
     var elem;
     if (domElement) {
@@ -67,37 +67,53 @@
       size: {
         x: {
           val: 0,
+          style: 'width',
+          unit: 'px',
         },
         y: {
           val: 0,
+          style: 'height',
+          unit: 'px',
         },
         z: {
           val: 0,
         },
       },
-      transform: {
+      translate: {
+        prefixVal: 'translate',
+        groupeStyle: transformfix,
         x: {
           val: 0,
+          unit: 'px',
         },
         y: {
           val: 0,
+          unit: 'px',
         },
         z: {
           val: 0,
+          unit: 'px',
         },
       },
       rotation: {
+        prefixVal: 'rotate',
+        groupeStyle: transformfix,
         x: {
           val: 0,
+          unit: 'deg',
         },
         y: {
           val: 0,
+          unit: 'deg',
         },
         z: {
           val: 0,
+          unit: 'deg',
         },
       },
       scale: {
+        prefixVal: 'scale',
+        groupeStyle: transformfix,
         x: {
           val: 1,
         },
@@ -110,6 +126,7 @@
       },
       opacity: {
         val: 1,
+        style: 'opaicty',
       },
     };
 
@@ -135,13 +152,19 @@
 
       if (!this.dirty) return;
 
+      /*
+      for (var i = 0; i < this.properties.length; i++) {
+        var propertiesGroup = this.properties[i];
+        var prefix = propertiesGroup.hasOwnProperty('prefixVal') ? propertiesGroup.prefixVal : false;
+      }*/
+
       transform = 'translate3d('
-                  + this.getCSS('transform', 'x') + 'px,'
-                  + this.getCSS('transform', 'y') + 'px,'
-                  + this.getCSS('transform', 'z') + 'px) rotateX('
-                  + this.getCSS('rotation', 'x') + 'deg) rotateY('
-                  + this.getCSS('rotation', 'y') + 'deg) rotateZ('
-                  + this.getCSS('rotation', 'z') + 'deg)';
+                + this.getCSS('translate', 'x') + ','
+                + this.getCSS('translate', 'y') + ','
+                + this.getCSS('translate', 'z') + ') rotateX('
+                + this.getCSS('rotation', 'x') + ') rotateY('
+                + this.getCSS('rotation', 'y') + ') rotateZ('
+                + this.getCSS('rotation', 'z') + ')';
 
       if (applyChildren && this.children.length) {
         this.children.forEach(function(child) {
@@ -150,8 +173,8 @@
       }
 
       this.elem.style[transformfix] = transform;
-      this.elem.style.width = this.getCSS('size', 'x') + 'px';
-      this.elem.style.height = this.getCSS('size', 'y') + 'px';
+      this.elem.style.width = this.getCSS('size', 'x');
+      this.elem.style.height = this.getCSS('size', 'y');
       this.dirty = false;
 
       return this;
@@ -178,7 +201,7 @@
      * @param {string} attr               attribute
      * @param {float}  val                value to set
      */
-    setAttr: function(transformFunction, attr, val) {
+    set: function(transformFunction, attr, val) {
       this.properties[transformFunction][attr].val = parseFloat(val);
       this.dirty = true;
       return this;
@@ -190,11 +213,10 @@
      * @param {float}  y                  y position
      * @param {float}  z                  z position
      */
-    set: function(transformFunction, x, y, z) {
-      this.properties[transformFunction].x.val = parseFloat(x);
-      this.properties[transformFunction].y.val = parseFloat(y);
-      this.properties[transformFunction].z.val = parseFloat(z);
-      this.dirty = true;
+    setAll: function(transformFunction, x, y, z) {
+      this.set(transformFunction, 'x', x);
+      this.set(transformFunction, 'y', y);
+      this.set(transformFunction, 'z', z);
       return this;
     },
     /**
@@ -204,8 +226,8 @@
      * @param {float}  y                 y increment
      * @param {float}  z                 z increment
      */
-    setRelative: function(transformFunction, x, y, z) {
-      this.set(
+    setAllRelative: function(transformFunction, x, y, z) {
+      this.setAll(
         transformFunction,
         this.get(transformFunction, 'x') + x,
         this.get(transformFunction, 'y') + y,
@@ -231,7 +253,8 @@
      * @returns {string}                    .toFixed(10) normalized value
      */
     getCSS: function(transformFunction, attr) {
-      return this.get(transformFunction, attr).toFixed(10);
+      var unit = this.properties[transformFunction][attr].unit || '';
+      return this.get(transformFunction, attr).toFixed(10) + unit;
     },
     /**
      * adds a child 3d element
