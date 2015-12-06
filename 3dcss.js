@@ -17,6 +17,7 @@
   var prefix;
   var transformfix;
   var perspectivefix;
+  var originfix;
   var Object3d;
   var Cam;
   var relateToDom;
@@ -42,6 +43,7 @@
 
   transformfix = prefix.js ? prefix.js + 'Transform' : 'transform';
   perspectivefix = prefix.js ? prefix.js + 'Perspective' : 'perspective';
+  originfix = prefix.js ? prefix.js + 'TransformOrigin' : 'transformOrigin';
 
   /**
    * binds the current instance to a DOM element or creates a new one
@@ -128,6 +130,22 @@
         val: 1,
         style: 'opaicty',
       },
+      origin: {
+        prefixVal: 'origin',
+        groupeStyle: originfix,
+        x: {
+          val: 50,
+          unit: '%',
+        },
+        y: {
+          val: 50,
+          unit: '%',
+        },
+        z: {
+          val: 0,
+          unit: '%',
+        },
+      },
     };
 
     this.isVisible = true;
@@ -135,7 +153,6 @@
     this.dirty = false;
     this.transition = null;
     this.transformStyle = 'preserve-3d';
-    this.transformOrigin = '50% 50% 0';
 
     this.elem = relateToDom('css3d', elem);
   };
@@ -173,6 +190,9 @@
       }
 
       this.elem.style[transformfix] = transform;
+      this.elem.style[originfix] = this.getCSS('origin', 'x') + ' ',
+                                 + this.getCSS('origin', 'y') + ' ',
+                                 + this.getCSS('origin', 'z');
       this.elem.style.width = this.getCSS('size', 'x');
       this.elem.style.height = this.getCSS('size', 'y');
       this.dirty = false;
@@ -274,13 +294,17 @@
     },
   };
 
-  Cam = function(elem) {
+  Cam = function(elem, debug) {
     this.visibles = [];
     this.dirty = false;
     this.perspective = 1200;
     this.obj3d = new Object3d(elem);
     this.setPerspective(this.perspective);
     this.applyStyle();
+
+    if (debug) {
+      this._debug();
+    }
   };
 
   Cam.prototype = {
@@ -308,6 +332,15 @@
       this.perspective = parseFloat(val);
       this.dirty = true;
       return this;
+    },
+    /**
+     * _debug visualizes the camera boundaries
+     * @returns void
+     */
+    _debug: function() {
+      this.debug = {};
+      this.faces = [];
+      console.log(this.debug)
     },
   };
 
