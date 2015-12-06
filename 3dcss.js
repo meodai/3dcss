@@ -143,7 +143,7 @@
         },
         z: {
           val: 0,
-          unit: '%',
+          unit: 'px',
         },
       },
     };
@@ -165,7 +165,7 @@
      * @returns {string} complete        transform string
      */
     applyStyle: function(applyChildren) {
-      var transform;
+      var transform, origin;
 
       if (!this.dirty) return;
 
@@ -183,6 +183,10 @@
                 + this.getCSS('rotation', 'y') + ') rotateZ('
                 + this.getCSS('rotation', 'z') + ')';
 
+      origin = this.getCSS('origin', 'x') + ' '
+             + this.getCSS('origin', 'y') + ' '
+             + this.getCSS('origin', 'z')
+
       if (applyChildren && this.children.length) {
         this.children.forEach(function(child) {
           child.applyStyle(true);
@@ -190,9 +194,7 @@
       }
 
       this.elem.style[transformfix] = transform;
-      this.elem.style[originfix] = this.getCSS('origin', 'x') + ' ',
-                                 + this.getCSS('origin', 'y') + ' ',
-                                 + this.getCSS('origin', 'z');
+      this.elem.style[originfix] = origin;
       this.elem.style.width = this.getCSS('size', 'x');
       this.elem.style.height = this.getCSS('size', 'y');
       this.dirty = false;
@@ -301,6 +303,7 @@
     this.obj3d = new Object3d(elem);
     this.setPerspective(this.perspective);
     this.applyStyle();
+    this.depth = 1000;
 
     if (debug) {
       this._debug();
@@ -340,6 +343,66 @@
     _debug: function() {
       this.debug = {};
       this.faces = [];
+
+      this.debug.left = new Object3d();
+      this.debug.left.set('origin', 'x', '0');
+      this.debug.left.set('size', 'x', this.depth);
+      this.debug.left.set('size', 'y', window.innerHeight);
+      this.debug.left.set('rotation', 'y', '90');
+      this.debug.left.applyStyle();
+      this.debug.left.elem.style.backgroundColor = 'rgba(250,0,0,.5)';
+      this.debug.left.elem.style.left = 0;
+      this.debug.left.elem.style.top = 0;
+      this.debug.left.elem.style.position = 'absolute';
+      this.obj3d.addChild(this.debug.left);
+
+      this.debug.right = new Object3d();
+      this.debug.right.set('origin', 'x', '100');
+      this.debug.right.set('size', 'x', this.depth);
+      this.debug.right.set('size', 'y', window.innerHeight);
+      this.debug.right.set('rotation', 'y', '-90');
+      this.debug.right.applyStyle();
+      this.debug.right.elem.style.backgroundColor = 'rgba(250,0,0,.5)';
+      this.debug.right.elem.style.right = 0;
+      this.debug.right.elem.style.top = 0;
+      this.debug.right.elem.style.position = 'absolute';
+      this.obj3d.addChild(this.debug.right);
+
+      this.debug.top = new Object3d();
+      this.debug.top.set('origin', 'y', '0');
+      this.debug.top.set('size', 'x', window.innerWidth);
+      this.debug.top.set('size', 'y', this.depth);
+      this.debug.top.set('rotation', 'x', '-90');
+      this.debug.top.applyStyle();
+      this.debug.top.elem.style.backgroundColor = 'rgba(0,0,250,.5)';
+      this.debug.top.elem.style.left = 0;
+      this.debug.top.elem.style.top = 0;
+      this.debug.top.elem.style.position = 'absolute';
+      this.obj3d.addChild(this.debug.top);
+
+      this.debug.bottom = new Object3d();
+      this.debug.bottom.set('origin', 'y', '100');
+      this.debug.bottom.set('size', 'x', window.innerWidth);
+      this.debug.bottom.set('size', 'y', this.depth);
+      this.debug.bottom.set('rotation', 'x', '90');
+      this.debug.bottom.applyStyle();
+      this.debug.bottom.elem.style.backgroundColor = 'rgba(0,0,250,.5)';
+      this.debug.bottom.elem.style.left = 0;
+      this.debug.bottom.elem.style.bottom = 0;
+      this.debug.bottom.elem.style.position = 'absolute';
+      this.obj3d.addChild(this.debug.bottom);
+
+      this.debug.back = new Object3d();
+      this.debug.back.set('size', 'x', window.innerWidth);
+      this.debug.back.set('size', 'y', window.innerHeight);
+      this.debug.back.set('translate', 'z', -this.depth);
+      this.debug.back.applyStyle();
+      this.debug.back.elem.style.backgroundColor = 'rgba(0,250,0,.5)';
+      this.debug.back.elem.style.left = 0;
+      this.debug.back.elem.style.top = 0;
+      this.debug.back.elem.style.position = 'absolute';
+      this.obj3d.addChild(this.debug.back);
+
       console.log(this.debug)
     },
   };
