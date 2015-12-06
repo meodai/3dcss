@@ -134,9 +134,13 @@ $(window).on('resize', setSize);
 var speed = 0.75;
 var max = -max;
 var direction = -1;
-
+var perspective = 0;
 
 function loop (){
+
+  //plays around with the perspective
+  cam.setPerspective( Math.min(perspective++, 1800) ).applyStyle();
+
   i = i + (direction * speed);
   world.set('translate', 'z', i);
   world.applyStyle();
