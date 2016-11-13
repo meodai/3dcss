@@ -303,7 +303,7 @@
     this.obj3d = new Object3d(elem);
     this.setPerspective(this.perspective);
     this.applyStyle();
-    this.depth = 1000;
+    this.depth = this.perspective;
 
     if (debug) {
       this._debug();
